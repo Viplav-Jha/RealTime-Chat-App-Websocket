@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  # Service for chat app 1
+  chat-app-1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}
+      - UPSTASH_REDIS_REST_URL=redis://default:55d02600f51748e0bfb7cc6bde06ba89@usw1-refined-scorpion-33996.upstash.io:33996
+
+  # Service for chat app 2
+  chat-app-2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}
+      - UPSTASH_REDIS_REST_URL=redis://default:55d02600f51748e0bfb7cc6bde06ba89@usw1-refined-scorpion-33996.upstash.io:33996
+
+  # Service for chat app 3
+  chat-app-3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}
+      - UPSTASH_REDIS_REST_URL=redis://default:55d02600f51748e0bfb7cc6bde06ba89@usw1-refined-scorpion-33996.upstash.io:33996
+
+  # Caddy service for reverse proxy
+  caddy:
+    image: caddy/caddy:2.7.3-alpine
+    container_name: caddy-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $PWD/CaddyFile:/etc/caddy/CaddyFile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  # Volume for Caddy data
+  caddy_data:
+  # Volume for Caddy configuration
+  caddy_config:
