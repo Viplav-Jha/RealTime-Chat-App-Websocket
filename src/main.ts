@@ -13,7 +13,8 @@ dotenv.config();
 const PORT = parseInt(process.env.PORT || "3001", 10);
 const Host = process.env.HOST || "0.0.0.0";
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:3000";
-const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL || "default-value";
+const UPSTASH_REDIS_REST_URL =
+  process.env.UPSTASH_REDIS_REST_URL || "default-value";
 const CONNECTION_COUNT_KEY = "chat:connection-count";
 const CONNECTION_COUNT_UPDATE_CHANNEL = "chat:connection-count-updated";
 const NEW_MESSAGE_CHANNEL = "chat:new-message";
@@ -115,7 +116,7 @@ async function buildServer() {
       port: PORT,
     });
   });
-  
+
   return app;
 }
 
